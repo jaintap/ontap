@@ -55,7 +55,11 @@ C1_cluster 			  1-80-000011           Unavailable    ok
 
 Force a failover to enable I/O from Site B and then establish a zero RTO relationship from Site B to Site A. Complete the following steps to perform a forced failover on Site B.
 
-. Unmap all LUNs belonging to the consistency group from Site B.
+. Unmap of the all the luns belonging to the consistency group will fail as it will not be able to replicate the map information from the secondary to primary.
+
+. Modify the igroup and set the replication peer vserver to "-". For example, igroup modify -igroup <igroup name> -replication-peer - -bypass-peer-validation true. This has to be done to all the igroups to which the luns are mapped.
+
+. After modification of the igroup, now delete the lun maps. For example, lun mapping delete -igroup <igroup name> -path <lun path> -vserver <vserver name>
 
 . Delete the SnapMirror consistency group relationship using the force option.
 
